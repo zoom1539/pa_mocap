@@ -16,7 +16,7 @@ int main()
     
     bool is_init = mocap.init(detect_wts_path, 
                                 hmr_wts_path);
-    if(!is_init)
+    if(!is_init) 
     {
         std::cout << "init fail\n";
         return 0;
