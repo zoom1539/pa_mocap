@@ -1,0 +1,40 @@
+#pragma once
+
+#ifdef API_EXPORTS
+#if defined(_MSC_VER)
+#define API __declspec(dllexport) 
+#else
+#define API __attribute__((visibility("default")))
+#endif
+#else
+#if defined(_MSC_VER)
+#define API __declspec(dllimport) 
+#else
+#define API 
+#endif
+#endif
+
+#include "opencv2/opencv.hpp"
+
+class API HMR
+{ 
+public:
+    explicit HMR();
+    ~HMR();
+
+    bool serialize(const std::string &wts_path_, const std::string &engine_path_);
+
+    // choose one from two
+    // 1
+    bool init(const std::string &engine_path_);
+    bool run(const std::vector<cv::Mat> &imgs_, 
+             std::vector<std::vector<cv::Vec3f> > &poses_,
+             std::vector<std::vector<float> > &shapes_);
+
+private:
+    HMR(const HMR &);
+    const HMR &operator=(const HMR &);
+
+    class Impl;
+    Impl *_impl;
+};

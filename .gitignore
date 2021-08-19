@@ -1,0 +1,7 @@
+build
+data/my_test_1.jpg
+data/zidane.jpg
+*.dll
+*.lib
+*.engine
+*.wts
