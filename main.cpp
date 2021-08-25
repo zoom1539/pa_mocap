@@ -26,7 +26,7 @@ int main()
     
     cv::Mat img = cv::imread("../data/im1010.jpg");
     
-    int iter = 10;
+    int iter = 1;
     double total_time = 0;
 
     for (int i = 0; i < iter; i++)

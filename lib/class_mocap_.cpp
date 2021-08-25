@@ -1,5 +1,45 @@
 #include "class_mocap_.h"
 
+// Checks if a matrix is a valid rotation matrix.
+static bool isRotationMatrix(cv::Mat &R)
+{
+	cv::Mat Rt;
+	cv::transpose(R, Rt);
+	cv::Mat shouldBeIdentity = Rt * R;
+	cv::Mat I = cv::Mat::eye(3,3, shouldBeIdentity.type());
+    
+    return  cv::norm(I, shouldBeIdentity) < 1e-6;
+    
+}
+
+// Calculates rotation matrix to euler angles
+// The result is the same as MATLAB except the order
+// of the euler angles ( x and z are swapped ).
+static cv::Vec3f rotationMatrixToEulerAngles(cv::Mat &R) // IMPORTANT: the type of the element in R should be float
+{
+    assert(isRotationMatrix(R));
+    
+    float sy = sqrt(R.at<float>(0,0) * R.at<float>(0,0) +  R.at<float>(1,0) * R.at<float>(1,0) );
+
+    bool singular = sy < 1e-6; // If
+
+    float x, y, z;
+    if (!singular)
+    {
+        x = atan2(R.at<float>(2,1) , R.at<float>(2,2));
+        y = atan2(-R.at<float>(2,0), sy);
+        z = atan2(R.at<float>(1,0), R.at<float>(0,0));
+    }
+    else
+    {
+        x = atan2(-R.at<float>(1,2), R.at<float>(1,1));
+        y = atan2(-R.at<float>(2,0), sy);
+        z = 0;
+    }
+    return cv::Vec3f(x, y, z);
+}
+
+
 _MoCap::_MoCap() {}
 _MoCap::~_MoCap() 
 {
@@ -73,7 +113,14 @@ bool _MoCap::run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_)
             return false;
         }
 
-        pose_ = poses[0];
+        for (int i = 0; i < poses[0].size(); i++)
+        {
+            cv::Mat rotmat;
+            cv::Rodrigues(poses[0][i], rotmat);
+            cv::Vec3f euler = rotationMatrixToEulerAngles(rotmat);
+            pose_.push_back(euler);
+        }
+
         return true;
     }
     else

@@ -1,17 +1,17 @@
 #pragma once
 
 #ifdef API_EXPORTS
-#if defined(_MSC_VER)
-#define API __declspec(dllexport) 
+	#if defined(_MSC_VER)
+	#define API __declspec(dllexport) 
+	#else
+	#define API __attribute__((visibility("default")))
+	#endif
 #else
-#define API __attribute__((visibility("default")))
-#endif
-#else
-#if defined(_MSC_VER)
-#define API __declspec(dllimport) 
-#else
-#define API 
-#endif
+	#if defined(_MSC_VER)
+	#define API __declspec(dllimport) 
+	#else
+	#define API 
+	#endif
 #endif
 
 #include "opencv2/opencv.hpp"
@@ -34,3 +34,12 @@ private:
     class Impl;
     Impl *_impl;
 };
+
+
+// extern "C" 
+// {
+//     API bool init(char *detector_wts_path_,
+//                   char *hmr_wts_path_);
+
+// 	API bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_);
+// }

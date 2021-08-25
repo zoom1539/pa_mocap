@@ -29,4 +29,34 @@ bool MoCap::run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_)
     return _impl->_MoCap.run(img_, pose_);
 }
 
+// static _MoCap _mocap;
+
+// bool init(char *detector_wts_path_, char *hmr_wts_path_)
+// {
+//     return _mocap.init(detector_wts_path_, hmr_wts_path_);
+// }
+   
+// bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_)
+// {
+//     cv::Mat img = cv::Mat(height_, width_, CV_8UC4, data_);
+//     cv::cvtColor(img, img, CV_RGBA2BGR);
+//     cv::flip(img, img, 0); // up to down
+
+//     std::vector<cv::Vec3f> pose;
+//     bool is_run = _mocap.run(img, pose);
+//     if(is_run)
+//     {
+//         for (int i = 0; i < pose_len_; i+=3)
+//         {
+//             pose_[i]     = pose[i / 3][0];
+//             pose_[i + 1] = pose[i / 3][1];
+//             pose_[i + 2] = pose[i / 3][2];
+//         }
+//     }
+//     else
+//     {
+//         return false;
+//     }
+// }
+
 
