@@ -14,32 +14,34 @@
 	#endif
 #endif
 
-#include "opencv2/opencv.hpp"
+// #include "opencv2/opencv.hpp"
 
-class API MoCap
-{
-public:
-    explicit MoCap();
-    ~MoCap();
-
-    bool init(std::string &detector_wts_path_,
-              const std::string &hmr_wts_path_);
-
-    bool run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_);
-
-private:
-    MoCap(const MoCap &);
-    const MoCap &operator=(const MoCap &);
-
-    class Impl;
-    Impl *_impl;
-};
-
-
-// extern "C" 
+// class API MoCap
 // {
-//     API bool init(char *detector_wts_path_,
-//                   char *hmr_wts_path_);
+// public:
+//     explicit MoCap();
+//     ~MoCap();
 
-// 	API bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_);
-// }
+//     bool init(std::string &detector_wts_path_,
+//               const std::string &hmr_wts_path_);
+
+//     bool run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_);
+
+// private:
+//     MoCap(const MoCap &);
+//     const MoCap &operator=(const MoCap &);
+
+//     class Impl;
+//     Impl *_impl;
+// };
+
+
+extern "C" 
+{
+    API bool init(char *detector_wts_path_,
+                  char *hmr_wts_path_);
+
+	API bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_);
+
+	API void release();
+}

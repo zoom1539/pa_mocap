@@ -5,17 +5,18 @@
 #include <time.h>
 #include <chrono>
 #include "class_mocap.h"
+#include "opencv2/opencv.hpp"
 
 int main()
 {
-    MoCap mocap;
+    //MoCap mocap;
 
     //
-    std::string detect_wts_path = "../lib/extra/detector/yolov5s.wts";
-    std::string hmr_wts_path = "../lib/extra/hmr/hmr.wts";
+    char *detect_wts_path = "../lib/extra/detector/yolov5s.wts";
+	char *hmr_wts_path = "../lib/extra/hmr/hmr.wts";
     
-    bool is_init = mocap.init(detect_wts_path, 
-                                hmr_wts_path);
+    bool is_init = init(detect_wts_path, 
+                        hmr_wts_path);
     if(!is_init) 
     {
         std::cout << "init fail\n";
@@ -33,8 +34,9 @@ int main()
     {
 		auto start = std::chrono::system_clock::now();
 
-        std::vector<cv::Vec3f> pose;
-        bool is_run = mocap.run(img, pose);
+        // std::vector<cv::Vec3f> pose;
+        float pose[72];
+        bool is_run = run(img.data, img.cols, img.rows, pose, 72);
         if(!is_run)
         {
             std::cout << "no people detected\n";
@@ -47,7 +49,7 @@ int main()
         if (is_run)
         {
             std::cout << "-------------" << std::endl;
-            for (int i = 0; i < pose.size(); i++)
+            for (int i = 0; i < 24 * 3; i++)
             {
                  std::cout << pose[i] << std::endl;
             }
@@ -55,6 +57,8 @@ int main()
     }
 
     std::cout << "average: " << total_time / iter << " ms" << std::endl;
+
+	release();
 
     std::cin.get();
     return 0;
