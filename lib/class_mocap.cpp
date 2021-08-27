@@ -33,17 +33,18 @@
 
 static _MoCap *_mocap;
 
-bool init(char *detector_wts_path_, char *hmr_wts_path_)
+bool init(char *detector_wts_path_, char *hmr_wts_path_, char *smpl_male_json_path_)
 {
 	_mocap = new _MoCap();
 
 	std::string detector_wts_path = detector_wts_path_;
 	std::string hmr_wts_path = hmr_wts_path_;
+	std::string smpl_male_json_path = smpl_male_json_path_;
 
-    return _mocap->init(detector_wts_path, hmr_wts_path);
+    return _mocap->init(detector_wts_path, hmr_wts_path, smpl_male_json_path);
 }
    
-bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_)
+bool run(unsigned char * data_, int width_, int height_, float *joints3d_, int joints3d_len_)
 {
 #if 1 // unity version
     cv::Mat img = cv::Mat(height_, width_, CV_8UC4, data_);
@@ -53,16 +54,17 @@ bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_
 	cv::Mat img = cv::Mat(height_, width_, CV_8UC3, data_);
 #endif
 
-    std::vector<cv::Vec3f> pose;
-    bool is_run = _mocap->run(img, pose);
+    std::vector<cv::Vec3f> joints3d;
+    bool is_run = _mocap->run(img, joints3d);
     if(is_run)
     {
-        for (int i = 0; i < pose_len_; i+=3)
+        for (int i = 0; i < joints3d_len_; i+=3)
         {
-            pose_[i]     = pose[i / 3][0];
-            pose_[i + 1] = pose[i / 3][1];
-            pose_[i + 2] = pose[i / 3][2];
+            joints3d_[i]     = joints3d[i / 3][0];
+            joints3d_[i + 1] = -joints3d[i / 3][1]; // turn to stand-up
+            joints3d_[i + 2] = -joints3d[i / 3][2];
         }
+        return true;
     }
     else
     {

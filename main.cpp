@@ -14,9 +14,11 @@ int main()
     //
     char *detect_wts_path = "../lib/extra/detector/yolov5s.wts";
 	char *hmr_wts_path = "../lib/extra/hmr/hmr.wts";
+	char *smpl_male_json_path = "../lib/extra/hmr/smpl_male.json";
     
     bool is_init = init(detect_wts_path, 
-                        hmr_wts_path);
+                        hmr_wts_path,
+						smpl_male_json_path);
     if(!is_init) 
     {
         std::cout << "init fail\n";

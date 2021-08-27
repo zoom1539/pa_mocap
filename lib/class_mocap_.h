@@ -13,9 +13,10 @@ public:
 
 public:
     bool init(std::string &detector_wts_path_,
-              const std::string &hmr_wts_path_);
+              const std::string &hmr_wts_path_,
+              std::string &smpl_male_json_path_);
 
-    bool run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_);
+    bool run(const cv::Mat &img_, std::vector<cv::Vec3f> &joints3d_);
     
 private:
     Detector _detector;

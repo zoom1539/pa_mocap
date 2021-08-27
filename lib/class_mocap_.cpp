@@ -47,7 +47,8 @@ _MoCap::~_MoCap()
 }
 
 bool _MoCap::init(std::string &detector_wts_path_,
-                  const std::string &hmr_wts_path_)
+                  const std::string &hmr_wts_path_,
+                  std::string &smpl_male_json_path_)
 {
     //
     std::string detector_engine_path = detector_wts_path_.substr(0,detector_wts_path_.rfind(".")) + ".engine";
@@ -68,13 +69,13 @@ bool _MoCap::init(std::string &detector_wts_path_,
 		_hmr.serialize(hmr_wts_path_, hmr_engine_path);
 	}
 	
-    bool is_hmr = _hmr.init(hmr_engine_path);
+    bool is_hmr = _hmr.init_joints(hmr_engine_path, smpl_male_json_path_);
 
     //
 	return is_detector & is_hmr;
 }
 
-bool _MoCap::run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_)
+bool _MoCap::run(const cv::Mat &img_, std::vector<cv::Vec3f> &joints3d_)
 {
     std::vector<cv::Mat> imgs;
     imgs.push_back(img_);
@@ -109,19 +110,23 @@ bool _MoCap::run(const cv::Mat &img_, std::vector<cv::Vec3f> &pose_)
 
         std::vector<std::vector<cv::Vec3f> > poses;
         std::vector<std::vector<float> > shapes;
-        bool is_run = _hmr.run(imgs, poses, shapes);
+        std::vector<std::vector<cv::Vec3f> > vec_3djoints;
+        std::vector<std::vector<cv::Vec3f> > vec_vertices;
+        bool is_run = _hmr.run_joints(imgs, poses, shapes, vec_3djoints, vec_vertices);
         if (!is_run)
         {
             return false;
         }
 
-        for (int i = 0; i < poses[0].size(); i++)
-        {
-            cv::Mat rotmat;
-            cv::Rodrigues(poses[0][i], rotmat);
-            cv::Vec3f euler = rotationMatrixToEulerAngles(rotmat);
-            pose_.push_back(euler);
-        }
+        // for (int i = 0; i < poses[0].size(); i++)
+        // {
+        //     cv::Mat rotmat;
+        //     cv::Rodrigues(poses[0][i], rotmat);
+        //     cv::Vec3f euler = rotationMatrixToEulerAngles(rotmat);
+        //     pose_.push_back(euler);
+        // }
+
+        joints3d_ = vec_3djoints[0];
 
         return true;
     }

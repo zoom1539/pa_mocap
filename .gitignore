@@ -5,3 +5,4 @@ data/zidane.jpg
 *.lib
 *.engine
 *.wts
+lib/extra/hmr/smpl_male.json

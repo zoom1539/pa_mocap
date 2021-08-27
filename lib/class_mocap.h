@@ -39,9 +39,10 @@
 extern "C" 
 {
     API bool init(char *detector_wts_path_,
-                  char *hmr_wts_path_);
+                  char *hmr_wts_path_,
+				  char *smpl_male_json_path_);
 
-	API bool run(unsigned char * data_, int width_, int height_, float *pose_, int pose_len_);
+	API bool run(unsigned char * data_, int width_, int height_, float *joints3d_, int joints3d_len_);
 
 	API void release();
 }
