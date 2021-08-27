@@ -25,7 +25,7 @@ int main()
 
     //
     
-    cv::Mat img = cv::imread("../data/im1010.jpg");
+    cv::Mat img = cv::imread("../data/im1010.jpg"); // ÐèÐÞ¸Äclass_mocap.cpp Line 48
     
     int iter = 1;
     double total_time = 0;

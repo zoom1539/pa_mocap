@@ -1,6 +1,7 @@
 #include "class_mocap.h"
 #include "class_mocap_.h"
 
+
 // class MoCap::Impl
 // {
 // public:
@@ -38,6 +39,7 @@ bool init(char *detector_wts_path_, char *hmr_wts_path_)
 
 	std::string detector_wts_path = detector_wts_path_;
 	std::string hmr_wts_path = hmr_wts_path_;
+
     return _mocap->init(detector_wts_path, hmr_wts_path);
 }
    

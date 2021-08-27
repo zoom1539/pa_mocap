@@ -57,6 +57,7 @@ bool _MoCap::init(std::string &detector_wts_path_,
         int class_num = 80;
 		_detector.serialize(detector_wts_path_, detector_engine_path, class_num);
 	}
+
     bool is_detector = _detector.init(detector_engine_path);
 
     //
@@ -66,6 +67,7 @@ bool _MoCap::init(std::string &detector_wts_path_,
 	{
 		_hmr.serialize(hmr_wts_path_, hmr_engine_path);
 	}
+	
     bool is_hmr = _hmr.init(hmr_engine_path);
 
     //
